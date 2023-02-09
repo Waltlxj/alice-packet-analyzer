@@ -72,3 +72,4 @@ tshark -r $ENC_FILE -o tls.keylog_file:$KEY_FILE -w http2.pcap -U "OSI layer 7"
 mergecap -w $DEC_FILE $ENC_FILE http2.pcap
 
 echo "Decryption complete! Check basic packets info in $DEC_FILE."
+rm -f $KEY_FILE
