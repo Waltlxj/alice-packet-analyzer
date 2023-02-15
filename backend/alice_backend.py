@@ -17,12 +17,13 @@ class AliceBackend:
         self.url = "https://www.google.com"
         pass
 
-    def browse_and_capture(self, url):
+    def browse_and_capture(self, url=None):
         """
         This function browses the provided URL, captures the transmitted packets, and decrypts the packets.
         """
         # customize url
-        self.url = url
+        if url:
+            self.url = url
         # get IP of URL to visit
         parsed_url = urlparse(self.url)
         ip = socket.gethostbyname(parsed_url.netloc)
@@ -39,7 +40,7 @@ class AliceBackend:
         # decrypt encrypted packets with tshark
         subprocess.run(
             'tshark -r {} -o tls.keylog_file:{} -w http2.pcap -U "OSI layer 7"'.format(
-                self.enc_file, self.self.key_file
+                self.enc_file, self.key_file
             ),
             shell=True,
         )
@@ -56,7 +57,7 @@ class AliceBackend:
         """
         return {1: "packet1", 2: "packet2", 3: "packet3"}
 
-    def get_encrypted_packets(self):
+    def get_decrypted_packets(self):
         """
         This function returns the decrypted packets information in a dictionary.
         """
@@ -73,3 +74,7 @@ if __name__ == "__main__":
     # Testing
     backend = AliceBackend()
     backend.browse_and_capture()  # default browsing google
+    print(backend.get_encrypted_packets())
+    print(backend.get_decrypted_packets())
+    print(backend.get_tls_handshake_details())
+    
