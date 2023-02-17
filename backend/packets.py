@@ -38,11 +38,16 @@ for packet in packets:
 				f.write("TLS cipher options: ")
 				for val in ciphers:
 					val = newdict[val]
-					f.write(val + "\n")
+					f.write(val + ",")
+				f.write("\n")
 				sig_algs = packet[TLS].msg[0].ext[8].sig_algs
 				f.write("Signature algorithms: ")
-				for i in range(5):
-					f.write(signaturedict[sig_algs[i]] + "\n")
+				for i in range(len(sig_algs)):
+					if sig_algs[i] not in signaturedict.keys():
+						f.write("UNKNOWN-" + str(i) + ",")
+					else:
+						f.write(signaturedict[sig_algs[i]] + ",")
+				f.write("\n")
 			elif packet[TLS].msg[0].msgtype == 2:
 				f.write("ServerHello" + "\n")
 				f.write("Sending IP: " + packet[IP].src + "\n")
@@ -57,3 +62,7 @@ for packet in packets:
 				cipher = newdict[cipher]
 				f.write(cipher + "\n")
 				f.close()
+
+
+#print (isinstance(packet[TLS].msg[0], TLSClientHello))
+#if packet[TCP].flags == 18:
