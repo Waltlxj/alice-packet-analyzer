@@ -80,25 +80,49 @@ class AliceBackend:
         self.packets = packets
         return Dict
 
-    def get_tls_handshake_details(self):
+    def get_tcp_handshake_details(self):
+        packets = rdpcap(self.enc_file)
+        tcp_handshake = {}
+        for packet in packets:
+            if packet[TCP].flags = 2:
+                tcp_handshake{"syn_seq"} = packet[TCP].seq
+                tcp_handshake{"syn_sending_port"} = packet[TCP].sport
+                tcp_handshake{"syn_destination_port"} = packet[TCP].dport
+            elif packet[TCP].flags = 18:
+                    tcp_handshake{"syn_ack_seq"} = packet[TCP].seq
+                    tcp_handshake{"syn__ack_sending_port"} = packet[TCP].sport
+                    tcp_handshake{"syn_ack_destination_port"} = packet[TCP].dport
+            elif packet[TCP].flags = 16:
+                    tcp_handshake{"ack_seq"} = packet[TCP].seq
+                    tcp_handshake{"ack_sending_port"} = packet[TCP].sport
+                    tcp_handshake{"ack_destination_port"} = packet[TCP].dport
         """
-        This function returns crytographic and certificate verification details in the tls handshake.
+        This function returns connection details from the tcp handshake(sequence numbers, port numbers, etc.)
         """
 
-        return {"info1": "line1", "info2": "line2", "info3": "line3"}
+        return tcp_handshake
     
-    def get_details_client_hello(self):
+    def get_tls_handshake_details(self):
         for packet in self.packets:
             print(packet)
         """
-        This function returns packet information of ClientHello as a dictionary.
+        This function returns packet information of ClientHello and ServerHello as a dictionary.
         """
         return {"SendingIP": "packet[IP.src], ..."}
-    def get_details_client_server(self):
+    
+    def get_ip_details(self):
+        packets = rdpcap(self.enc_file)
+        ip_dictionary = {}
+        for packet in packets:
+            if TCP in packet:
+                if packet[TCP].flags == 2:
+                    ip_dictionary{"ClientIP"} = packet[IP].src
+                    ip_dictionary{"ServerIP"} = packet[IP].dst
+                    ip_dictionary{"IP_version"} = packet[IP].version
         """
-        This function returns packet info of ClientHello as a dictionary.
+        This function returns ip information for the connection(IP addresses, version no., etc.)
         """
-        return {"SendingIP": "packet[IP.src], ..."}
+        return ip_dictionary
 
 
 
