@@ -99,6 +99,14 @@ class AliceBackend:
                     tcp_handshake["ack_destination_port"] = packet[TCP].dport
         """
         This function returns connection details from the tcp handshake(sequence numbers, port numbers, etc.)
+        Specifics: 
+        -seq: The specific sequence number for a given packet: used to keep track of the number of packets sent
+        in a connection. Typically randomized before sending for security reasons.
+        -sending port: The client/server port that the message was sent from. Many ports have specific uses:
+        for example, port 443 is the TCP port used to make an HTTPS connection, and port 80 is the port for a standard
+        HTTP connection. Clients like laptops typically use randomized ports in the range of 1024-65535.
+        -destination port: See above.
+        Dictionary returns sequence number, sending port and destination port for the SYN, SYN/ACK, and ACK messages.
         """
 
         return tcp_handshake
@@ -143,7 +151,15 @@ class AliceBackend:
     					cipher = packet[TLS].msg[0].cipher
     					cipher = newdict[cipher]
     					tls_dictionary["server_hello_encryption_selection"] = cipher
-    					
+    	 """
+        This function returns connection details from the tls handshake
+        Specifics: 
+        -encryption options: Symmetric data encryption algorithms that are supported by the client system, 
+        such as AES or Camellia. (Note: This is a long list so should probably be filtered in some way)
+        -encryption selection: The symmetric encryption algorithm chosen by the server from the 
+        list of options given by the client.
+        -signature options: Certificate signature encryption algorithms that are supported by the client system
+        """
     	return tls_dictionary
     
     def get_ip_details(self):
