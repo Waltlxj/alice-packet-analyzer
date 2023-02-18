@@ -15,6 +15,7 @@ backend = dummy_backend.AliceBackend()
 
 @api.route('/ip/')
 def get_ip(self):
+    #Need more information
     pass
 
 @api.route('/encrypted/')
