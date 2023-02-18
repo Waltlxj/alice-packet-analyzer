@@ -3,6 +3,7 @@ import subprocess
 import socket
 from urllib.parse import urlparse
 from scapy.all import *
+load_layer("tls")
 from scapy.layers.tls.handshake import TLSClientHello
 import csv
 
@@ -103,12 +104,47 @@ class AliceBackend:
         return tcp_handshake
     
     def get_tls_handshake_details(self):
-        for packet in self.packets:
-            print(packet)
-        """
-        This function returns packet information of ClientHello and ServerHello as a dictionary.
-        """
-        return {"SendingIP": "packet[IP.src], ..."}
+    	tls_dictionary = {}
+    	with open('tls-parameters-4.csv', mode='r') as infile:
+    		reader = csv.reader(infile)
+    		mydict = {rows[0]:rows[1] for rows in reader}
+    	newdict = {}
+    	for k,v in mydict.items():
+    		k = int((k[2:4]+k[7:9]), 16)
+    		newdict[k] = v
+    		
+    	with open('tls-signaturescheme.csv', mode='r') as infile:
+    		reader = csv.reader(infile)
+    		tempdict = {rows[0]:rows[1] for rows in reader}
+    	signaturedict = {}
+    	for k,v in tempdict.items():
+    		k = int((k[2:6]), 16)
+    		signaturedict[k] = v
+    	packets = rdpcap(self.dec_file)
+    	for packet in packets:
+    		if TLS in packet:
+    			if packet[TLS].type == 22:
+    				if packet[TLS].msg[0].msgtype == 1:
+    					ciphers = packet[TLS].msg[0].ciphers
+    					cipherlist = []
+    					for val in ciphers:
+    						val = newdict[val]
+    						cipherlist.append(val)
+    					sig_algs = packet[TLS].msg[0].ext[8].sig_algs
+    					signaturelist = []
+    					for i in range(len(sig_algs)):
+    						if sig_algs[i] not in signaturedict.keys():
+    							signaturelist.append("UNKNOWN-" + str(i))
+    						else:
+    							signaturelist.append(signaturedict[sig_algs[i]])
+    					tls_dictionary["client_hello_signature_options"] = signaturelist
+    					tls_dictionary["client_hello_encryption_options"] = cipherlist
+    				elif packet[TLS].msg[0].msgtype == 2:
+    					cipher = packet[TLS].msg[0].cipher
+    					cipher = newdict[cipher]
+    					tls_dictionary["server_hello_encryption_selection"] = cipher
+    					
+    	return tls_dictionary
     
     def get_ip_details(self):
         packets = rdpcap(self.enc_file)
@@ -116,9 +152,9 @@ class AliceBackend:
         for packet in packets:
             if TCP in packet:
                 if packet[TCP].flags == 2:
-                    ip_dictionary{"ClientIP"} = packet[IP].src
-                    ip_dictionary{"ServerIP"} = packet[IP].dst
-                    ip_dictionary{"IP_version"} = packet[IP].version
+                    ip_dictionary["ClientIP"] = packet[IP].src
+                    ip_dictionary["ServerIP"] = packet[IP].dst
+                    ip_dictionary["IP_version"] = packet[IP].version
         """
         This function returns ip information for the connection(IP addresses, version no., etc.)
         """
@@ -131,6 +167,8 @@ if __name__ == "__main__":
     # Testing
     backend = AliceBackend()
     backend.browse_and_capture()  # default browsing google
-    print(backend.get_encrypted_packets())
-    print(backend.get_decrypted_packets())
+    #print(backend.get_encrypted_packets())
+    #print(backend.get_decrypted_packets())
     print(backend.get_tls_handshake_details())
+    print(backend.get_ip_details())
+    print(backend.get_tcp_handshake_details())
