@@ -84,15 +84,15 @@ class AliceBackend:
         packets = rdpcap(self.enc_file)
         tcp_handshake = {}
         for packet in packets:
-            if packet[TCP].flags = 2:
+            if packet[TCP].flags == 2:
                 tcp_handshake{"syn_seq"} = packet[TCP].seq
                 tcp_handshake{"syn_sending_port"} = packet[TCP].sport
                 tcp_handshake{"syn_destination_port"} = packet[TCP].dport
-            elif packet[TCP].flags = 18:
+            elif packet[TCP].flags == 18:
                     tcp_handshake{"syn_ack_seq"} = packet[TCP].seq
                     tcp_handshake{"syn__ack_sending_port"} = packet[TCP].sport
                     tcp_handshake{"syn_ack_destination_port"} = packet[TCP].dport
-            elif packet[TCP].flags = 16:
+            elif packet[TCP].flags == 16:
                     tcp_handshake{"ack_seq"} = packet[TCP].seq
                     tcp_handshake{"ack_sending_port"} = packet[TCP].sport
                     tcp_handshake{"ack_destination_port"} = packet[TCP].dport
