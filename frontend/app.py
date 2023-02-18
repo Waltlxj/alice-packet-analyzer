@@ -26,7 +26,7 @@ def decrypted():
 
 @app.route('/verbose') 
 def verbose():
-    return flask.render_template('encrypted.html')
+    return flask.render_template('verbose.html')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('An application that displays encrypted/unencrypted protocols.')
