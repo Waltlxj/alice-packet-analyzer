@@ -1,0 +1,83 @@
+body {
+    font-family: 'Courier New', monospace;
+}
+
+h2 {
+    font-size: 50px;
+    width: 100%;
+    text-align: center;
+    border-style: solid;
+    margin-bottom: 0px;
+}
+
+h3 {
+    font-size: 40px;
+    width: 100%;
+    text-align: center;
+}
+
+h4 {
+    margin-top: 0px;
+    font-size: 20px;
+    padding: 4px;
+    color: white;
+    background-color: black;
+    text-align: center;
+    border-style: solid;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button {
+    font-family: 'Courier New', monospace;
+    display: block;
+    color: black;
+    background-color: white;
+    
+    width: 25%;
+    padding: 20px;
+    font-size: 25px;
+
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+button:hover{
+    background-color: yellow;
+    border-style: dashed;
+    transition: 0.3s;
+}
+
+p {
+    width: 25%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.protocols {
+    font-size: 40px;
+    width: 100%;
+    color: orange;
+    text-align: center;
+}
+
+
+.tcp {
+    color: blue;
+    
+}
+
+.tls {
+    color: green;
+
+}
+
+.http {
+    color: red;
+}
+
+.fin {
+    color: magenta;
+}
