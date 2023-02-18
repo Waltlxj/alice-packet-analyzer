@@ -3,6 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+    <script type="text/javascript" src="{{ url_for('static', filename='encrypted.js') }}" ></script>
 
     <title>Alice's Packet Analyzer</title>
     <h2>Alice's Packet Analyzer</h2>
@@ -13,10 +14,19 @@
     <h3><u>Encrypted</u></h3>
 
     <div class = "protocols">
-        <h5 class="tcp"> tcp</h5>
+        <h5 class="tcp" id="tcp"> tcp </h5>
         <h5 class="tls"> tls</h5>
         <h5 class="fin"> fin</h5>
     </div>
+
+    <div>
+        <table class = "results" id="results_table">
+        </table>
+
+    </div>
+
+
+
 
     <table>
         <form action="{{url_for('decrypted')}}">

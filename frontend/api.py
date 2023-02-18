@@ -13,6 +13,8 @@ api = flask.Blueprint('api', __name__)
 #TO-DO: change to real backend
 backend = dummy_backend.AliceBackend()
 
+#localhost/api/____
+
 @api.route('/ip/')
 def get_ip(self):
     #Need more information
