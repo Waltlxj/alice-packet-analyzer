@@ -5,6 +5,8 @@ from urllib.parse import urlparse
 from scapy.all import *
 load_layer("tls")
 from scapy.layers.tls.handshake import TLSClientHello
+from scapy.sessions import TCPSession
+
 import csv
 
 
@@ -45,7 +47,7 @@ class AliceBackend:
         
         # decrypt encrypted packets with tshark
         subprocess.run(
-                'tshark -r {} -o tls.keylog_file:{} -V  > {}'.format(
+                'tshark -r {} -o tls.keylog_file:{} -P -V > {}'.format(
                 self.enc_file, self.key_file, self.dec_plaintext
             ),
             shell=True,
@@ -82,10 +84,12 @@ class AliceBackend:
         Dict = {}
         idx = 1
         load_layer("tls")
+        file = open(self.dec_plaintext, "r")
         packets = rdpcap(self.dec_file)
-        for packet in packets:
-            Dict[idx] = packet
-            idx+=1
+        for line in file:
+        	if "→" in line:
+            		Dict[idx] = line
+            		idx+=1
         self.packets = packets
         return Dict
 
@@ -136,7 +140,7 @@ class AliceBackend:
     	for k,v in tempdict.items():
     		k = int((k[2:6]), 16)
     		signaturedict[k] = v
-    	packets = rdpcap(self.dec_file)
+    	packets = self.packets
     	for packet in packets:
     		if TLS in packet:
     			if packet[TLS].type == 22:
@@ -161,7 +165,7 @@ class AliceBackend:
     					tls_dictionary["server_hello_encryption_selection"] = cipher
                     
                 
-    	 """
+    	"""
         This function returns connection details from the tls handshake
         Specifics: 
         -encryption options: Symmetric data encryption algorithms that are supported by the client system, 
@@ -173,7 +177,7 @@ class AliceBackend:
     	return tls_dictionary
 
     def get_http_certificate_details(self):
-        http_dict{}
+        http_dict = {}
         file = open(self.dec_plaintext)
         for line in file:
             if "Stream: HEADERS," in line:
@@ -184,8 +188,8 @@ class AliceBackend:
             elif "subjectPublicKeyInfo" in line:
                 if "certificatePublicKeyAlgorithm" not in http_dict.keys():
                     http_dict["certificatePublicKeyAlgorithm"] = next(file, " ").strip()
+        file.close()
         return http_dict
-        
     def get_ip_details(self):
         packets = rdpcap(self.enc_file)
         ip_dictionary = {}
@@ -208,7 +212,8 @@ if __name__ == "__main__":
     backend = AliceBackend()
     backend.browse_and_capture()  # default browsing google
     #print(backend.get_encrypted_packets())
-    #print(backend.get_decrypted_packets())
-    print(backend.get_tls_handshake_details())
-    print(backend.get_ip_details())
-    print(backend.get_tcp_handshake_details())
+    print(backend.get_decrypted_packets())
+    #print(backend.get_tls_handshake_details())
+    #print(backend.get_ip_details())
+    #print(backend.get_tcp_handshake_details())
+    #print(backend.get_http_certificate_details())
