@@ -16,6 +16,7 @@ class AliceBackend:
     def __init__(self) -> None:
         self.enc_file = "encrypted.pcap"
         self.dec_file = "decryptedGoogle.pcap"
+        self.dec_plaintext = "decrypted.txt"
         self.key_file = "sslkeys.txt"
         self.url = "https://www.google.com"
         self.packets = None
@@ -41,7 +42,14 @@ class AliceBackend:
         processes = [subprocess.Popen(cmd, shell=True) for cmd in commands]
         for p in processes:
             p.wait()
+        
         # decrypt encrypted packets with tshark
+        subprocess.run(
+                'tshark -r {} -o tls.keylog_file:{} -V  > {}'.format(
+                self.enc_file, self.key_file, self.dec_plaintext
+            ),
+            shell=True,
+        )
         subprocess.run(
                 'tshark -r {} -o tls.keylog_file:{} -w http2.pcap -U "OSI layer 7"'.format(
                 self.enc_file, self.key_file
@@ -151,6 +159,8 @@ class AliceBackend:
     					cipher = packet[TLS].msg[0].cipher
     					cipher = newdict[cipher]
     					tls_dictionary["server_hello_encryption_selection"] = cipher
+                    
+                
     	 """
         This function returns connection details from the tls handshake
         Specifics: 
@@ -161,7 +171,21 @@ class AliceBackend:
         -signature options: Certificate signature encryption algorithms that are supported by the client system
         """
     	return tls_dictionary
-    
+
+    def get_http_certificate_details(self):
+        http_dict{}
+        file = open(self.dec_plaintext)
+        for line in file:
+            if "Stream: HEADERS," in line:
+                if "httpRequestHeader" not in http_dict.keys():
+                    http_dict["httpRequestHeader"] = line.strip()
+                else:
+                    http_dict["httpResponseHeader"] = line.strip()
+            elif "subjectPublicKeyInfo" in line:
+                if "certificatePublicKeyAlgorithm" not in http_dict.keys():
+                    http_dict["certificatePublicKeyAlgorithm"] = next(file, " ").strip()
+        return http_dict
+        
     def get_ip_details(self):
         packets = rdpcap(self.enc_file)
         ip_dictionary = {}
