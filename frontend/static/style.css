@@ -59,33 +59,45 @@ p {
 .protocols {
     font-size: 40px;
     width: 100%;
-    color: orange;
     text-align: center;
 }
 
-
-.tcp {
-    color: blue;
-    
+.ip {
+    color: orange;
 }
 
-.tls {
+.enpkt {
     color: green;
-
 }
 
-.http {
+.depkt {
     color: red;
 }
 
-.fin {
+.tcp {
+    color: blue;
+}
+
+.tls {
     color: magenta;
+}
+
+.fin {
+    color:rgb(0, 200, 255);
 }
 
 .results {
     color:black;
-    font-size: 25px;
+    font-size: 30px;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
+}
+
+.infoProtocol {
+    width: 40%;
+    font-size: 30px;
+    margin-left: auto;
+    margin-right: auto;
+
 }
