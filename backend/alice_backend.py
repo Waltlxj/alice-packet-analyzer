@@ -73,7 +73,7 @@ class AliceBackend:
         idx = 1
         packets = rdpcap(self.enc_file)
         for packet in packets:
-            Dict[idx] = packet
+            Dict[idx] = packet.summary()
             idx+=1
         return Dict
 
@@ -86,11 +86,18 @@ class AliceBackend:
         load_layer("tls")
         file = open(self.dec_plaintext, "r")
         packets = rdpcap(self.dec_file)
-        for line in file:
-        	if "→" in line:
-            		Dict[idx] = line
-            		idx+=1
+        for packet in packets:	
+        	if packet.summary() == 'Raw':
+        		for line in file:
+        			if line.strip().startswith(str(idx)):
+        				print(line)
+        				Dict[idx] = line
+        				idx+=1
+        	else:
+        		Dict[idx] = packet.summary()
+        		idx+=1
         self.packets = packets
+        file.close()
         return Dict
 
     def get_tcp_handshake_details(self):
