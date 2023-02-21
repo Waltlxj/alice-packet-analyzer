@@ -6,6 +6,7 @@ from scapy.all import *
 load_layer("tls")
 from scapy.layers.tls.handshake import TLSClientHello
 from scapy.sessions import TCPSession
+from itertools import islice
 
 import csv
 
@@ -20,7 +21,7 @@ class AliceBackend:
         self.dec_file = "decryptedGoogle.pcap"
         self.dec_plaintext = "decrypted.txt"
         self.key_file = "sslkeys.txt"
-        self.url = "https://www.wikipedia.org"
+        self.url = "https://en.wikipedia.org"
         self.packets = None
         pass
 
@@ -87,14 +88,14 @@ class AliceBackend:
         file = open(self.dec_plaintext, "r")
         packets = rdpcap(self.dec_file)
         for packet in packets:	
-        	if packet.summary() == 'Raw':
-        		for line in file:
-        			if line.strip().startswith(str(idx)):
-        				Dict[idx] = line
-        				idx+=1
-        	else:
-        		Dict[idx] = packet.summary()
-        		idx+=1
+            if packet.summary() == 'Raw':
+                for line in file:
+                    if line.strip().startswith(str(idx)):
+                        Dict[idx] = line
+                        idx+=1
+            else:
+                Dict[idx] = packet.summary()
+                idx+=1
         self.packets = packets
         file.close()
         return Dict
@@ -130,48 +131,72 @@ class AliceBackend:
         return tcp_handshake
     
     def get_tls_handshake_details(self):
-    	tls_dictionary = {}
-    	with open('tls-parameters-4.csv', mode='r') as infile:
-    		reader = csv.reader(infile)
-    		mydict = {rows[0]:rows[1] for rows in reader}
-    	newdict = {}
-    	for k,v in mydict.items():
-    		k = int((k[2:4]+k[7:9]), 16)
-    		newdict[k] = v
-    		
-    	with open('tls-signaturescheme.csv', mode='r') as infile:
-    		reader = csv.reader(infile)
-    		tempdict = {rows[0]:rows[1] for rows in reader}
-    	signaturedict = {}
-    	for k,v in tempdict.items():
-    		k = int((k[2:6]), 16)
-    		signaturedict[k] = v
-    	packets = self.packets
-    	for packet in packets:
-    		if TLS in packet:
-    			if packet[TLS].type == 22:
-    				if packet[TLS].msg[0].msgtype == 1:
-    					ciphers = packet[TLS].msg[0].ciphers
-    					cipherlist = []
-    					for val in ciphers:
-    						val = newdict[val]
-    						cipherlist.append(val)
-    					sig_algs = packet[TLS].msg[0].ext[8].sig_algs
-    					signaturelist = []
-    					for i in range(len(sig_algs)):
-    						if sig_algs[i] not in signaturedict.keys():
-    							signaturelist.append("UNKNOWN-" + str(i))
-    						else:
-    							signaturelist.append(signaturedict[sig_algs[i]])
-    					tls_dictionary["client_hello_signature_options"] = signaturelist
-    					tls_dictionary["client_hello_encryption_options"] = cipherlist
-    				elif packet[TLS].msg[0].msgtype == 2:
-    					cipher = packet[TLS].msg[0].cipher
-    					cipher = newdict[cipher]
-    					tls_dictionary["server_hello_encryption_selection"] = cipher
+        tls_dictionary = {}
+        with open('tls-parameters-4.csv', mode='r') as infile:
+            reader = csv.reader(infile)
+            mydict = {rows[0]:rows[1] for rows in reader}
+        newdict = {}
+        for k,v in mydict.items():
+            k = int((k[2:4]+k[7:9]), 16)
+            newdict[k] = v
+            
+        with open('tls-signaturescheme.csv', mode='r') as infile:
+            reader = csv.reader(infile)
+            tempdict = {rows[0]:rows[1] for rows in reader}
+        signaturedict = {}
+        for k,v in tempdict.items():
+            k = int((k[2:6]), 16)
+            signaturedict[k] = v
+        packets = self.packets
+        file = open(self.dec_plaintext)
+        for packet in packets:
+            if TLS in packet:
+                if packet[TLS].type == 22:
+                    if packet[TLS].msg[0].msgtype == 1:
+                        ciphers = packet[TLS].msg[0].ciphers
+                        cipherlist = []
+                        for val in ciphers:
+                            val = newdict[val]
+                            cipherlist.append(val)
+                        sig_algs = packet[TLS].msg[0].ext[8].sig_algs
+                        signaturelist = []
+                        for i in range(len(sig_algs)):
+                            if sig_algs[i] not in signaturedict.keys():
+                                signaturelist.append("UNKNOWN-" + str(i))
+                            else:
+                                signaturelist.append(signaturedict[sig_algs[i]])
+                        tls_dictionary["client_hello_signature_options"] = signaturelist
+                        tls_dictionary["client_hello_encryption_options"] = cipherlist
+                    elif packet[TLS].msg[0].msgtype == 2:
+                        cipher = packet[TLS].msg[0].cipher
+                        cipher = newdict[cipher]
+                        tls_dictionary["server_hello_encryption_selection"] = cipher
+        for line in file:
+            if "subjectPublicKeyInfo" in line:
+                    if "certificatePublicKeyAlgorithm" not in tls_dictionary.keys():
+                            tls_dictionary["certificatePublicKeyAlgorithm"] = next(file).strip().split("(")[1].strip(")")
+            elif "Certificate Length" in line:
+                    if "certificateLength" not in tls_dictionary.keys():
+                        tls_dictionary["certificateLength"] = line.split()[2]
+            elif "issuer:" in line:
+                    print("True")
+                    if "certificateProvider" not in tls_dictionary.keys():
+                        first_string = next(file).strip()
+                        next_string = first_string.split("=")[2]
+                        result = next_string.split(",")[0]
+                        if result[0].isalpha() == False:
+                            tls_dictionary["certificateProvider"] = "Error identifying"
+                        else:
+                            tls_dictionary["certificateProvider"] = result
+            elif "subjectPublicKey:" in line:
+                    if "subjectPublicKey" not in tls_dictionary.keys():
+                        tls_dictionary["subjectPublicKey"] = line.strip().split(" ")[1]
+            elif "Handshake Type: Certificate Verify" in line:
+                    resultline = list(islice(file, 2))[-1].strip()
+                    tls_dictionary["signature algorithm selection"] = resultline.split(" ")[2]
                     
-                
-    	"""
+        file.close()      
+        """
         This function returns connection details from the tls handshake
         Specifics: 
         -encryption options: Symmetric data encryption algorithms that are supported by the client system, 
@@ -180,10 +205,12 @@ class AliceBackend:
         list of options given by the client.
         -signature options: Certificate signature encryption algorithms that are supported by the client system
         """
-    	return tls_dictionary
+        return tls_dictionary
 
     def get_http_certificate_details(self):
         http_dict = {}
+        httppackets = 0
+        http_data_size = 0
         file = open(self.dec_plaintext)
         for line in file:
             if "Stream: HEADERS," in line:
@@ -191,24 +218,15 @@ class AliceBackend:
                     http_dict["httpRequestHeader"] = line.strip()
                 else:
                     http_dict["httpResponseHeader"] = line.strip()
-            elif "subjectPublicKeyInfo" in line:
-                if "certificatePublicKeyAlgorithm" not in http_dict.keys():
-                    http_dict["certificatePublicKeyAlgorithm"] = next(file, " ").strip()
-            elif "Certificate Length" in line:
-            	if "certificateLength" not in http_dict.keys():
-            		http_dict["certificateLength"] = line.split()[2]
-            elif "issuer:" in line:
-            	if "certificateAuthority" not in http_dict.keys():
-            		first_string = next(file).strip()
-            		next_string = first_string.split("=")[2]
-            		result = next_string.split(",")[0]
-            		if result[0].isalpha() == False:
-            			http_dict["certificateAuthority"] = "Error identifying"
-            		else:
-            			http_dict["certificateAuthority"] = result
-            elif "subjectPublicKey:" in line:
-            	if "subjectPublicKey" not in http_dict.keys():
-            		http_dict["subjectPublicKey"] = line.strip().split(" ")[1]
+            elif "Stream: DATA," in line:
+                httppackets+= 1
+                result = next(file).strip().split(" ")[1]
+                http_data_size += int(result)
+        http_dict["num_of_http_data_packets"] = httppackets
+        if httppackets == 0:
+        	http_dict["average_http_packet_size"] = 0
+        else:
+        	http_dict["average_http_packet_size"] = http_data_size / httppackets
         file.close()
         return http_dict
     def get_ip_details(self):
@@ -233,8 +251,8 @@ if __name__ == "__main__":
     backend = AliceBackend()
     backend.browse_and_capture()  # default browsing google
     #print(backend.get_encrypted_packets())
-    #print(backend.get_decrypted_packets())
-    #print(backend.get_tls_handshake_details())
+    backend.get_decrypted_packets()
+    print(backend.get_tls_handshake_details())
     #print(backend.get_ip_details())
     #print(backend.get_tcp_handshake_details())
-    print(backend.get_http_certificate_details())
+    #print(backend.get_http_certificate_details())
