@@ -20,7 +20,7 @@ class AliceBackend:
         self.dec_file = "decryptedGoogle.pcap"
         self.dec_plaintext = "decrypted.txt"
         self.key_file = "sslkeys.txt"
-        self.url = "https://www.google.com"
+        self.url = "https://www.wikipedia.org"
         self.packets = None
         pass
 
@@ -90,7 +90,6 @@ class AliceBackend:
         	if packet.summary() == 'Raw':
         		for line in file:
         			if line.strip().startswith(str(idx)):
-        				print(line)
         				Dict[idx] = line
         				idx+=1
         	else:
@@ -195,6 +194,21 @@ class AliceBackend:
             elif "subjectPublicKeyInfo" in line:
                 if "certificatePublicKeyAlgorithm" not in http_dict.keys():
                     http_dict["certificatePublicKeyAlgorithm"] = next(file, " ").strip()
+            elif "Certificate Length" in line:
+            	if "certificateLength" not in http_dict.keys():
+            		http_dict["certificateLength"] = line.split()[2]
+            elif "issuer:" in line:
+            	if "certificateAuthority" not in http_dict.keys():
+            		first_string = next(file).strip()
+            		next_string = first_string.split("=")[2]
+            		result = next_string.split(",")[0]
+            		if result[0].isalpha() == False:
+            			http_dict["certificateAuthority"] = "Error identifying"
+            		else:
+            			http_dict["certificateAuthority"] = result
+            elif "subjectPublicKey:" in line:
+            	if "subjectPublicKey" not in http_dict.keys():
+            		http_dict["subjectPublicKey"] = line.strip().split(" ")[1]
         file.close()
         return http_dict
     def get_ip_details(self):
@@ -219,8 +233,8 @@ if __name__ == "__main__":
     backend = AliceBackend()
     backend.browse_and_capture()  # default browsing google
     #print(backend.get_encrypted_packets())
-    print(backend.get_decrypted_packets())
+    #print(backend.get_decrypted_packets())
     #print(backend.get_tls_handshake_details())
     #print(backend.get_ip_details())
     #print(backend.get_tcp_handshake_details())
-    #print(backend.get_http_certificate_details())
+    print(backend.get_http_certificate_details())
