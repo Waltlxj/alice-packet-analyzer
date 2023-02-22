@@ -64,6 +64,7 @@ class AliceBackend:
             shell=True,
         )
         subprocess.run("rm -f {}".format(self.key_file), shell=True)
+        self.packets = rdpcap(self.enc_file)
         return True
 
     def get_encrypted_packets(self):
@@ -86,7 +87,7 @@ class AliceBackend:
         idx = 1
         load_layer("tls")
         file = open(self.dec_plaintext, "r")
-        packets = rdpcap(self.dec_file)
+        packets = self.packets
         for packet in packets:	
             if packet.summary() == 'Raw':
                 for line in file:
@@ -179,7 +180,6 @@ class AliceBackend:
                     if "certificateLength" not in tls_dictionary.keys():
                         tls_dictionary["certificateLength"] = line.split()[2]
             elif "issuer:" in line:
-                    print("True")
                     if "certificateProvider" not in tls_dictionary.keys():
                         first_string = next(file).strip()
                         next_string = first_string.split("=")[2]
@@ -207,17 +207,18 @@ class AliceBackend:
         """
         return tls_dictionary
 
-    def get_http_details(self):
+    def get_http_certificate_details(self):
         http_dict = {}
         httppackets = 0
         http_data_size = 0
         file = open(self.dec_plaintext)
         for line in file:
             if "Stream: HEADERS," in line:
+                first_line = line.strip().split(",")[3]
                 if "httpRequestHeader" not in http_dict.keys():
-                    http_dict["httpRequestHeader"] = line.strip()
+                    http_dict["httpRequestHeader"] = "HEADER:" + first_line
                 else:
-                    http_dict["httpResponseHeader"] = line.strip()
+                    http_dict["httpResponseHeader"] = "HEADER:" + first_line
             elif "Stream: DATA," in line:
                 httppackets+= 1
                 result = next(file).strip().split(" ")[1]
@@ -251,8 +252,8 @@ if __name__ == "__main__":
     backend = AliceBackend()
     backend.browse_and_capture()  # default browsing google
     #print(backend.get_encrypted_packets())
-    backend.get_decrypted_packets()
+    #backend.get_decrypted_packets()
     print(backend.get_tls_handshake_details())
     #print(backend.get_ip_details())
     #print(backend.get_tcp_handshake_details())
-    #print(backend.get_http_details())
+    #print(backend.get_http_certificate_details())
