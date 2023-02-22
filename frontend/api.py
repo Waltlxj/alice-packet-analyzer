@@ -11,14 +11,18 @@ import dummy_backend
 api = flask.Blueprint('api', __name__)
 
 #TO-DO: change to real backend
+#backend = alice_backend.AliceBackend()
 backend = dummy_backend.AliceBackend()
 
-#localhost/api/____
+'''
+To access api in particular in browser url type:
+localhost/api/<route>
+'''
 
-@api.route('/ip/')
-def get_ip(self):
-    #Need more information
-    pass
+# Call a function here (no api) for browse and capture.
+
+def setup_url(url):
+    backend.browse_and_capture(url)
 
 @api.route('/encrypted/')
 def get_encrypted_packets_api():
@@ -30,7 +34,21 @@ def get_decrypted_packets_api():
     de_packets = backend.get_encrypted_packets()
     return json.dumps(de_packets) 
 
+@api.route('/tcp/')
+def get_tcp():
+    pass
+
 @api.route('/tls/')
-def get_tls_api():
+def get_tls():
     tls_handshake = backend.get_tls_handshake_details()
     return json.dumps(tls_handshake)
+    
+@api.route('/http/')
+def get_http_details(self):
+    pass
+
+@api.route('/ip/')
+def get_ip(self):
+    #Need more information
+    pass
+

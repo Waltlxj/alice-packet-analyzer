@@ -28,6 +28,16 @@ def decrypted():
 def verbose():
     return flask.render_template('verbose.html')
 
+@app.route('/details') 
+def details():
+    url = flask.request.args.get('url')
+        #if url:
+        #import backend here
+        #then backend.browse_and_capture()
+
+    return flask.render_template('details.html')
+
+
 # To run file in commandline type "python3 app.py localhost 5000"
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('An application that displays encrypted/unencrypted protocols.')

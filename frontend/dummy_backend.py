@@ -22,6 +22,7 @@ class AliceBackend:
         """
         This function browses the provided URL, captures the transmitted packets, and decrypts the packets.
         """
+        print("BROWSE AND CAPTURE")
 
     def get_encrypted_packets(self):
         """
@@ -35,11 +36,16 @@ class AliceBackend:
         """
         return {1: "packet1", 2: "packet2", 3: "packet3"}
 
+    def get_tcp_handshake_details(self):
+        pass
+
     def get_tls_handshake_details(self):
         """
         This function returns crytographic and certificate verification details in the tls handshake.
         """
         return {"info1": "line1", "info2": "line2", "info3": "line3"}
+
+    def get_http_details(self):
 
     def get_ip_details(self):
         pass

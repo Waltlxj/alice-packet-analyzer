@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+
+    <title>Alice's Packet Analyzer</title>   
+    <div>
+        <h2>Alice's Packet Analyzer</h2>
+        <h4><u> url: jeff_ondich.com </u></h4>
+    </div>
+
+</head>
+<body>
+
+    <table>
+        <form action="{{url_for('encrypted')}}">
+            <tr><button>Encrypted</button></tr>
+        </form>
+
+        <form action="{{url_for('decrypted')}}">
+            <tr><button>Decrypted</button></tr>
+        </form>  
+
+        <form action="#verbose">
+            <tr><button>Verbose</button></tr>
+        </form>
+
+    </table>
+
+    <p>
+
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nunc quam, iaculis in nisi non, feugiat venenatis augue. Donec sodales ultricies dui ut tempus. Sed elementum convallis nunc, fermentum vulputate nulla laoreet sodales. Cras nec ipsum risus. Duis ornare orci at orci maximus, a tincidunt risus scelerisque. Suspendisse fringilla mauris et mi commodo interdum. Fusce orci lacus, sodales at suscipit eget, euismod id magna.
+
+    </p>
+
+
+</body>
+</html>
