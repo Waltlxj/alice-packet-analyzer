@@ -19,10 +19,19 @@ To access api in particular in browser url type:
 localhost/api/<route>
 '''
 
+url = ''
+
 # Call a function here (no api) for browse and capture.
 
-def setup_url(url):
-    backend.browse_and_capture(url)
+def setup_url(user_url):
+    backend.browse_and_capture(user_url)
+
+'''
+This might be stupid
+@api.route(url)
+def get_url():
+    return url
+'''
 
 @api.route('/encrypted/')
 def get_encrypted_packets_api():
@@ -36,7 +45,8 @@ def get_decrypted_packets_api():
 
 @api.route('/tcp/')
 def get_tcp():
-    pass
+    tcp_handshake = backend.get_tcp_handshake_details()
+    return json.dumps(tcp_handshake)
 
 @api.route('/tls/')
 def get_tls():
@@ -45,10 +55,12 @@ def get_tls():
     
 @api.route('/http/')
 def get_http_details(self):
-    pass
+    http = backend.get_http_details()
+    return json.dumps(http)
 
 @api.route('/ip/')
 def get_ip(self):
     #Need more information
-    pass
+    ip = backend.get_ip_details()
+    return json.dumps(ip)
 
