@@ -78,20 +78,21 @@ p {
     color: blue;
 }
 
+.http {
+    color: rgb(0, 200, 255)
+}
+
+
 .tls {
     color: magenta;
 }
 
-.fin {
-    color:rgb(0, 200, 255);
-}
-
 .results {
     color:black;
-    font-size: 30px;
+    font-size: 15px;
     margin-left: auto;
     margin-right: auto;
-    text-align: center;
+    text-align: left;
 }
 
 .infoProtocol {

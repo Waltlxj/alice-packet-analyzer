@@ -12,11 +12,21 @@ function initialize() {
     depktButton.onclick = onClickDepkt;
 
     // TCP
-
+    var tcpButton = document.getElementById('tcp');
+    tcpButton.onclick = onClickTcp;
 
     // TLS
+    var tlsButton = document.getElementById('tls');
+    tlsButton.onclick = onClickTls;
 
     // IP
+    var ipButton = document.getElementById('ip');
+    ipButton.onclick = onClickIp;
+
+    // HTTP
+    var httpButton = document.getElementById('http');
+    http.onclick = onClickHttp;
+
 
 }
 
@@ -41,16 +51,18 @@ function getEnpkt() {
 
         // Build the table body.
         var tableBody = '';
-        console.log(enpktOutput);
+        console.log(Object.keys(enpktOutput).length);
 
         // NOTE: output JSON/dict starts at 1
         // Gets packet from 1-3
-        tableBody += '<tr><td>' + enpktOutput[1] + '</td></tr>';
-        tableBody += '<tr><td>' + enpktOutput[2] + '</td></tr>';
-        tableBody += '<tr><td>' + enpktOutput[3] + '</td></tr>';
+        for(var i = 1; i < Object.keys(enpktOutput).length; i++) {
+            tableBody += '<tr><td>' + enpktOutput[i] + '</td></tr>';
+        }
 
+        //console.log(tableBody);
         var resultsTableElement = document.getElementById('results_table');
         resultsTableElement.innerHTML = tableBody;
+
 
         var infoBoxElement = document.getElementById('infobox');
         infoBoxElement.innerHTML = "I love encrypted packets.";
@@ -84,13 +96,11 @@ function getDepkt() {
 
         // Build the table body.
         var tableBody = '';
-        console.log(depktOutput);
 
         // NOTE: output JSON/dict starts at 1
-        // Gets packet from 1-3
-        tableBody += '<tr><td>' + depktOutput[1] + '</td></tr>';
-        tableBody += '<tr><td>' + depktOutput[2] + '</td></tr>';
-        tableBody += '<tr><td>' + depktOutput[3] + '</td></tr>';
+        for(var i = 1; i < Object.keys(depktOutput).length; i++) {
+            tableBody += '<tr><td>' + depktOutput[i] + '</td></tr>';
+        }
 
         var resultsTableElement = document.getElementById('results_table');
         resultsTableElement.innerHTML = tableBody;
@@ -107,47 +117,37 @@ function getDepkt() {
 
 }
 
-/*
-function onCluesSearch(searchText) {
+function onClickTcp() {
+    getTcp();
+}
 
-    var url = getAPIBaseURL() + '/clues/' + searchText;
+function getTcp() {
 
-    // Send the request to the Crosswords API /authors/ endpoint
+    var url = getAPIBaseURL() + '/tcp/';
     fetch(url, {method: 'get'})
-
-    // When the results come back, transform them from a JSON string into
-    // a Javascript object (in this case, a list of author dictionaries).
     .then((response) => response.json())
+    .then(function(tcpOutput) {
 
-    // Once you have your list of author dictionaries, use it to build
-    // an HTML table displaying the author names and lifespan.
-    .then(function(clueList) {
         // Build the table body.
         var tableBody = '';
 
-        var searchResult = document.getElementById('search-result');
-        if(clueList == 0) {
-            searchResult.innerHTML = "No results found for:" + '"' + searchText + '"' + ' Try a different search!';
-        }
-        else {
-            searchResult.innerHTML = "Showing results for: " + '"' + searchText + '"';
+        // NOTE: output JSON/dict starts at 1
 
-            for (var k = 0; k < clueList.length; k++) {
-                tableBody += '<tr><td><a onclick="getPuzzleFromClue(' + clueList[k]['clue_id']+ ",'"
-                    + clueList[k]['clue']  + "','"
-                    + clueList[k]['answer'] 
-                    + "')\">"
-                    + clueList[k]['clue']
-                    + '</a></td></tr>';
+        var tcpKeys = Object.keys(tcpOutput);
+        console.log(tcpKeys);
 
-            }
+        for(var i = 0; i < tcpKeys.length; i++ ) {
+            tableBody += '<tr><td>' + tcpKeys[i] + '</td>';
+            tableBody += '<td>' + tcpOutput[tcpKeys[i]] + '</td></tr>';
+
         }
-        // Put the table body we just built inside the table that's already on the page.
+
         var resultsTableElement = document.getElementById('results_table');
-        if (resultsTableElement) {
-            resultsTableElement.innerHTML = tableBody;
-        }
-        console.log(tableBody);
+        resultsTableElement.innerHTML = tableBody;
+
+        var infoBoxElement = document.getElementById('infobox');
+        infoBoxElement.innerHTML = "I love tcp.";
+
     })
 
     // Log the error if anything went wrong during the fetch.
@@ -156,4 +156,116 @@ function onCluesSearch(searchText) {
     });
 
 }
-*/
+
+function onClickTls() {
+    getTls();
+}
+
+function getTls() {
+
+    var url = getAPIBaseURL() + '/tls/';
+    fetch(url, {method: 'get'})
+    .then((response) => response.json())
+    .then(function(tlsOutput) {
+
+        // Build the table body.
+        var tableBody = '';
+
+        // NOTE: output JSON/dict starts at 1
+        var tlsKeys = Object.keys(tlsOutput);
+        console.log(tlsKeys);
+
+        for(var i = 0; i < tlsKeys.length; i++ ) {
+            tableBody += '<tr><td>' + tlsKeys[i] + '</td>';
+            tableBody += '<td>' + tlsOutput[tlsKeys[i]] + '</td></tr>';
+
+        }
+
+        var resultsTableElement = document.getElementById('results_table');
+        resultsTableElement.innerHTML = tableBody;
+
+        var infoBoxElement = document.getElementById('infobox');
+        infoBoxElement.innerHTML = "I love tls.";
+
+    })
+
+    // Log the error if anything went wrong during the fetch.
+    .catch(function(error) {
+        console.log(error);
+    });
+}
+
+
+function onClickIp() {
+    getIp();
+}
+
+function getIp() {
+    var url = getAPIBaseURL() + '/ip/';
+    fetch(url, {method: 'get'})
+    .then((response) => response.json())
+    .then(function(ipOutput) {
+
+        // Build the table body.
+        var tableBody = '';
+
+        // NOTE: output JSON/dict starts at 1
+        var ipKeys = Object.keys(ipOutput);
+        console.log(ipKeys);
+
+        for(var i = 0; i < ipKeys.length; i++ ) {
+            tableBody += '<tr><td>' + ipKeys[i] + '</td>';
+            tableBody += '<td>' + ipOutput[ipKeys[i]] + '</td></tr>';
+
+        }
+
+        var resultsTableElement = document.getElementById('results_table');
+        resultsTableElement.innerHTML = tableBody;
+
+        var infoBoxElement = document.getElementById('infobox');
+        infoBoxElement.innerHTML = "I love ips.";
+
+    })
+
+    // Log the error if anything went wrong during the fetch.
+    .catch(function(error) {
+        console.log(error);
+    });
+}
+
+function onClickHttp() {
+    getHttp();
+}
+
+function getHttp() {
+    var url = getAPIBaseURL() + '/http/';
+    fetch(url, {method: 'get'})
+    .then((response) => response.json())
+    .then(function(httpOutput) {
+
+        // Build the table body.
+        var tableBody = '';
+
+        // NOTE: output JSON/dict starts at 1
+        var httpKeys = Object.keys(httpOutput);
+        console.log(httpKeys);
+
+        for(var i = 0; i < httpKeys.length; i++ ) {
+            tableBody += '<tr><td>' + httpKeys[i] + '</td>';
+            tableBody += '<td>' + httpOutput[httpKeys[i]] + '</td></tr>';
+
+        }
+
+        var resultsTableElement = document.getElementById('results_table');
+        resultsTableElement.innerHTML = tableBody;
+
+        var infoBoxElement = document.getElementById('infobox');
+        infoBoxElement.innerHTML = "I love ips.";
+
+    })
+
+    // Log the error if anything went wrong during the fetch.
+    .catch(function(error) {
+        console.log(error);
+    });
+}

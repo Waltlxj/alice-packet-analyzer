@@ -8,6 +8,11 @@ import flask
 import json
 import dummy_backend
 
+'''
+sys.path.append('../backend')
+import alice_backend
+'''
+
 api = flask.Blueprint('api', __name__)
 
 #TO-DO: change to real backend
@@ -54,12 +59,12 @@ def get_tls():
     return json.dumps(tls_handshake)
     
 @api.route('/http/')
-def get_http_details(self):
+def get_http_details():
     http = backend.get_http_details()
     return json.dumps(http)
 
 @api.route('/ip/')
-def get_ip(self):
+def get_ip():
     #Need more information
     ip = backend.get_ip_details()
     return json.dumps(ip)
