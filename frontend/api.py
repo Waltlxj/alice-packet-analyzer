@@ -47,7 +47,7 @@ def get_encrypted_packets_api():
 
 @api.route('/decrypted/')
 def get_decrypted_packets_api():
-    de_packets = backend.get_encrypted_packets()
+    de_packets = backend.get_decrypted_packets()
     return json.dumps(de_packets) 
 
 @api.route('/tcp/')
