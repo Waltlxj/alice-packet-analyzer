@@ -9,6 +9,8 @@ import json
 import dummy_backend
 
 '''
+Uncomment to run real backend!
+
 sys.path.append('../backend')
 import alice_backend
 '''
@@ -68,4 +70,3 @@ def get_ip():
     #Need more information
     ip = backend.get_ip_details()
     return json.dumps(ip)
-

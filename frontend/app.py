@@ -32,9 +32,6 @@ def verbose():
 def details():
     url = flask.request.args.get('url')
     if url:
-        # Import backend here
-        # Then backend.browse_and_capture()
-        # This might be broken.
         api.setup_url(url) 
     return flask.render_template('details.html')
 
