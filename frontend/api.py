@@ -61,7 +61,7 @@ def get_tls():
     return json.dumps(tls_handshake)
     
 @api.route('/http/')
-def get_http_details():
+def get_http():
     http = backend.get_http_details()
     return json.dumps(http)
 
