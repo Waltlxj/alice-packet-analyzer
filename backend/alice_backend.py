@@ -64,7 +64,7 @@ class AliceBackend:
             shell=True,
         )
         subprocess.run("rm -f {}".format(self.key_file), shell=True)
-        self.packets = rdpcap(self.enc_file)
+        self.packets = rdpcap(self.dec_file)
         return True
 
     def get_encrypted_packets(self):
@@ -97,7 +97,6 @@ class AliceBackend:
             else:
                 Dict[idx] = packet.summary()
                 idx+=1
-        self.packets = packets
         file.close()
         return Dict
 
@@ -251,9 +250,9 @@ if __name__ == "__main__":
     # Testing
     backend = AliceBackend()
     backend.browse_and_capture()  # default browsing google
-    #print(backend.get_encrypted_packets())
-    #backend.get_decrypted_packets()
-    print(backend.get_tls_handshake_details())
+    print(backend.get_encrypted_packets())
+    print(backend.get_decrypted_packets())
+    #print(backend.get_tls_handshake_details())
     #print(backend.get_ip_details())
     #print(backend.get_tcp_handshake_details())
     #print(backend.get_http_certificate_details())
