@@ -206,7 +206,7 @@ class AliceBackend:
         """
         return tls_dictionary
 
-    def get_http_certificate_details(self):
+    def get_http_details(self):
         http_dict = {}
         httppackets = 0
         http_data_size = 0
@@ -255,4 +255,4 @@ if __name__ == "__main__":
     #print(backend.get_tls_handshake_details())
     #print(backend.get_ip_details())
     #print(backend.get_tcp_handshake_details())
-    #print(backend.get_http_certificate_details())
+    #print(backend.get_http_details())
