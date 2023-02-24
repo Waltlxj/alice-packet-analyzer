@@ -2,35 +2,31 @@ window.onload = initialize;
 
 function initialize() {
 
-    // Encrypted Packets
-    var enpktButton = document.getElementById('enpkt');
-    enpktButton.onclick = onClickEnpkt;
-
-    /*
     // Decrypted Packets
     var depktButton = document.getElementById('depkt');
     depktButton.onclick = onClickDepkt;
-
-    // HTTP
-    var httpButton = document.getElementById('http');
-    http.onclick = onClickHttp;
-    */
-   
-    // TLS
-    var tlsButton = document.getElementById('tls');
-    tlsButton.onclick = onClickTls;
 
     // TCP
     var tcpButton = document.getElementById('tcp');
     tcpButton.onclick = onClickTcp;
 
-    
+    /*
+    // Encrypted Packets
+    var enpktButton = document.getElementById('enpkt');
+    enpktButton.onclick = onClickEnpkt;
+
+    // TLS
+    var tlsButton = document.getElementById('tls');
+    tlsButton.onclick = onClickTls;
+    */
 
     // IP
     var ipButton = document.getElementById('ip');
     ipButton.onclick = onClickIp;
 
-    
+    // HTTP
+    var httpButton = document.getElementById('http');
+    http.onclick = onClickHttp;
 
 
 }

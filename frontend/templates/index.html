@@ -4,18 +4,27 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
 
-    <title>Alice's Packet Analyzer</title>   
-    <div>
-        <h2>Alice's Packet Analyzer</h2>
-        <h4><u> url: jeff_ondich.com </u></h4>
-    </div>
-
 </head>
 <body>
 
+    <title>Alice's Packet Analyzer</title>   
+
+    <div>
+        <h2>Alice's Packet Analyzer</h2>
+        <h4><u> Get your packets! </u></h4>
+    </div>
+
+    <br>
+
+    <p class='welcome'>
+        Welcome to <b>Alice's Packet Analyzer</b>! Please type in a <u>url</u> in the search box below to get the various packets and protocols for that particular site! 
+        <br><br>
+        <b><em>Note:</em></b> full urls work better such as <u>"https://www.google.com"</u> instead of <u>"google.com"</u>.
+    </p>
+
     <form method="get" action="/details">
-        <input type="text" id="url" name="url"> 
-        <input type="submit"> 
+        <input class="search" type="text" id="url" name="url"> 
+        <input class="submit" type="submit"> 
     </form>
 
 </body>

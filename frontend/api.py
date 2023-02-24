@@ -26,18 +26,18 @@ To access api in particular in browser url type:
 localhost/api/<route>
 '''
 
-url = ''
+
 
 # Call a function here (no api) for browse and capture.
 
 def setup_url(user_url):
+    url = user_url
     backend.browse_and_capture(user_url)
 
 '''
-This might be stupid
-@api.route(url)
+@api.route('/url/')
 def get_url():
-    return url
+    return json.dumps(url)
 '''
 
 @api.route('/encrypted/')

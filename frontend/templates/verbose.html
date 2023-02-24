@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+    <script type="text/javascript" src="{{ url_for('static', filename='verbose.js') }}" ></script>
+
+    <title>Alice's Packet Analyzer</title>
+</head>
+<body>
+    <div>
+        <h2>Alice's Packet Analyzer</h2>
+        <h4 id="urldisplay"><u> Get your packets! </u></h4>
+        <script>
+            passedUrl = localStorage.getItem("passedUrl");
+            document.getElementById("urldisplay").innerHTML = '<u>' + passedUrl +'</u>';
+        </script>
+    </div>
+    <br>
+    <h3><u>Verbose</u></h3>
+
+
+    <p class='welcome'>
+        All output data for your url.
+    </p>
+
+
+    <div class = "protocols">
+        <h5 class="ip" id="ip"> IP</h5>
+        <table class="results" id="ip_table">
+
+        </table>
+        <h5 class="tcp" id="tcp"> TCP </h5>
+        <table class="results" id="tcp_table">
+
+        </table>
+        <h5 class="http" id="http"> HTTP </h5>
+        <table class="results" id="http_table">
+
+        </table>
+        <h5 class="enpkt" id="enpkt"> Encrypted Packets </h5>
+        <table class="results" id="encrypted_table">
+
+        </table>
+        <h5 class="depkt" id="depkt"> Decrypted Packets </h5>
+        <table class="results" id="decrypted_table">
+
+        </table>
+        <h5 class="tls" id ="tls"> TLS</h5>
+        <table class="results" id="tls_table">
+
+        </table>        
+    </div>
+
+    
+    <div class = "databox">
+        <table class="results" id="results_table">
+
+        </table>
+
+
+    <table>
+        <form action="{{url_for('home')}}">
+            <tr><button>Home</button></tr>
+        </form>
+        <form action="{{url_for('encrypted')}}">
+            <tr><button>Encrypted</button></tr>
+        </form>
+        <form action="{{url_for('decrypted')}}">
+            <tr><button>Decrypted</button></tr>
+        </form>  
+    </table>
+    
+</body>
+</html>

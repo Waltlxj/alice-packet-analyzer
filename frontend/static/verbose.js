@@ -2,37 +2,12 @@ window.onload = initialize;
 
 function initialize() {
 
-    // Encrypted Packets
-    var enpktButton = document.getElementById('enpkt');
-    enpktButton.onclick = onClickEnpkt;
-
-    /*
-    // Decrypted Packets
-    var depktButton = document.getElementById('depkt');
-    depktButton.onclick = onClickDepkt;
-
-    // HTTP
-    var httpButton = document.getElementById('http');
-    http.onclick = onClickHttp;
-    */
-   
-    // TLS
-    var tlsButton = document.getElementById('tls');
-    tlsButton.onclick = onClickTls;
-
-    // TCP
-    var tcpButton = document.getElementById('tcp');
-    tcpButton.onclick = onClickTcp;
-
-    
-
-    // IP
-    var ipButton = document.getElementById('ip');
-    ipButton.onclick = onClickIp;
-
-    
-
-
+    getTcp();
+    getEnpkt();
+    getDepkt();
+    getIp();
+    getTls();
+    getHttp();
 }
 
 function getAPIBaseURL() {
@@ -43,9 +18,6 @@ function getAPIBaseURL() {
     return baseURL;
 }
 
-function onClickEnpkt() {
-    getEnpkt();
-}
 
 function getEnpkt() {
 
@@ -65,13 +37,9 @@ function getEnpkt() {
             tableBody += '<td>' + enpktOutput[i] + '</td></tr>';
         }
 
-        //console.log(tableBody);
-        var resultsTableElement = document.getElementById('results_table');
+        console.log(tableBody);
+        var resultsTableElement = document.getElementById('encrypted_table');
         resultsTableElement.innerHTML = tableBody;
-
-
-        var infoBoxElement = document.getElementById('infobox');
-        infoBoxElement.innerHTML = "I love encrypted packets.";
     })
 
     // Log the error if anything went wrong during the fetch.
@@ -87,10 +55,6 @@ function getAPIBaseURL() {
                     + ':' + window.location.port
                     + '/api';
     return baseURL;
-}
-
-function onClickDepkt() {
-    getDepkt();
 }
 
 function getDepkt() {
@@ -109,11 +73,8 @@ function getDepkt() {
             tableBody += '<td>' + depktOutput[i] + '</td></tr>';
         }
 
-        var resultsTableElement = document.getElementById('results_table');
+        var resultsTableElement = document.getElementById('decrypted_table');
         resultsTableElement.innerHTML = tableBody;
-
-        var infoBoxElement = document.getElementById('infobox');
-        infoBoxElement.innerHTML = "I love decrypted packets.";
 
     })
 
@@ -122,10 +83,6 @@ function getDepkt() {
         console.log(error);
     });
 
-}
-
-function onClickTcp() {
-    getTcp();
 }
 
 function getTcp() {
@@ -149,11 +106,8 @@ function getTcp() {
 
         }
 
-        var resultsTableElement = document.getElementById('results_table');
+        var resultsTableElement = document.getElementById('tcp_table');
         resultsTableElement.innerHTML = tableBody;
-
-        var infoBoxElement = document.getElementById('infobox');
-        infoBoxElement.innerHTML = "I love tcp.";
 
     })
 
@@ -162,10 +116,6 @@ function getTcp() {
         console.log(error);
     });
 
-}
-
-function onClickTls() {
-    getTls();
 }
 
 function getTls() {
@@ -200,11 +150,8 @@ function getTls() {
 
         }
 
-        var resultsTableElement = document.getElementById('results_table');
+        var resultsTableElement = document.getElementById('tls_table');
         resultsTableElement.innerHTML = tableBody;
-
-        var infoBoxElement = document.getElementById('infobox');
-        infoBoxElement.innerHTML = "I love tls.";
 
     })
 
@@ -214,10 +161,6 @@ function getTls() {
     });
 }
 
-
-function onClickIp() {
-    getIp();
-}
 
 function getIp() {
     var url = getAPIBaseURL() + '/ip/';
@@ -238,11 +181,8 @@ function getIp() {
 
         }
 
-        var resultsTableElement = document.getElementById('results_table');
+        var resultsTableElement = document.getElementById('ip_table');
         resultsTableElement.innerHTML = tableBody;
-
-        var infoBoxElement = document.getElementById('infobox');
-        infoBoxElement.innerHTML = "I love ips.";
 
     })
 
@@ -250,10 +190,6 @@ function getIp() {
     .catch(function(error) {
         console.log(error);
     });
-}
-
-function onClickHttp() {
-    getHttp();
 }
 
 function getHttp() {
@@ -275,12 +211,8 @@ function getHttp() {
 
         }
 
-        var resultsTableElement = document.getElementById('results_table');
+        var resultsTableElement = document.getElementById('http_table');
         resultsTableElement.innerHTML = tableBody;
-
-        var infoBoxElement = document.getElementById('infobox');
-        infoBoxElement.innerHTML = "I love ips.";
-
     })
 
     // Log the error if anything went wrong during the fetch.

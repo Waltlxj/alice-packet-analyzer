@@ -18,12 +18,37 @@ h3 {
 
 h4 {
     margin-top: 0px;
-    font-size: 20px;
+    font-size: 30px;
     padding: 4px;
     color: white;
     background-color: black;
     text-align: center;
     border-style: solid;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.welcome {
+    font-size: 30px;
+    width: 50%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search {
+    display: block;
+    font-size: 40px;
+    font-family: 'Courier New', monospace;
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.submit {
+    display: block;
+    font-size: 40px;
+    font-family: 'Courier New', monospace;
+    width: 40%;
     margin-left: auto;
     margin-right: auto;
 }
@@ -89,10 +114,23 @@ p {
 
 .results {
     color:black;
-    font-size: 15px;
+    width: 50%;
+    font-size: 18px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    
     margin-left: auto;
     margin-right: auto;
     text-align: left;
+}
+
+td {
+    border-bottom-style: solid;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-right: 10px;
+    padding-left: 10px;
+    border-color: black;
 }
 
 .infoProtocol {
