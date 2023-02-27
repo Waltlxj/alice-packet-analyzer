@@ -21,7 +21,7 @@ class AliceBackend:
         self.dec_file = "decrypted.pcap"
         self.dec_plaintext = "decrypted.txt"
         self.key_file = "sslkeys.txt"
-        self.url = "https://en.wikipedia.org"
+        self.url = "https://www.cia.gov"
         self.packets = None
         pass
 
@@ -88,15 +88,17 @@ class AliceBackend:
         load_layer("tls")
         file = open(self.dec_plaintext, "r")
         packets = self.packets
-        for packet in packets:	
-            if packet.summary() == 'Raw':
-                for line in file:
-                    if line.strip().startswith(str(idx)):
-                        Dict[idx] = line
-                        idx+=1
-            else:
-                Dict[idx] = packet.summary()
-                idx+=1
+        num_packets = len(packets)
+        for packet in packets:
+            if idx < num_packets:
+               if 'Raw' in packet.summary():
+                   for line in file:
+                       if line.strip().startswith(str(idx)):
+                           Dict[idx] = line
+                           idx+=1
+               else:
+                   Dict[idx] = packet.summary()
+                   idx+=1
         file.close()
         return Dict
 
@@ -251,7 +253,7 @@ if __name__ == "__main__":
     # Testing
     backend = AliceBackend()
     backend.browse_and_capture()  # default browsing google
-    print(backend.get_encrypted_packets())
+    #print(backend.get_encrypted_packets())
     print(backend.get_decrypted_packets())
     #print(backend.get_tls_handshake_details())
     #print(backend.get_ip_details())
