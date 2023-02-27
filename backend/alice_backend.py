@@ -35,12 +35,11 @@ class AliceBackend:
         print("cURL browsing", self.url)
         # get IP of URL to visit
         parsed_url = urlparse(self.url)
-        ip = socket.gethostbyname(parsed_url.netloc)
         # set up enviromental variables
         os.environ["SSLKEYLOGFILE"] = self.key_file
         # run tshark and cURL simultaneously
         commands = [
-            'tshark -i eth0 -w {} -f "host {}" -a duration:5'.format(self.enc_file, ip),
+            'tshark -i eth0 -w {}  -a duration:5'.format(self.enc_file),
             "sleep 1 && curl -s {} > /dev/null".format(self.url),
         ]
         processes = [subprocess.Popen(cmd, shell=True) for cmd in commands]
@@ -105,18 +104,19 @@ class AliceBackend:
         packets = rdpcap(self.enc_file)
         tcp_handshake = {}
         for packet in packets:
-            if packet[TCP].flags == 2:
-                tcp_handshake["syn_seq"] = packet[TCP].seq
-                tcp_handshake["syn_sending_port"] = packet[TCP].sport
-                tcp_handshake["syn_destination_port"] = packet[TCP].dport
-            elif packet[TCP].flags == 18:
-                    tcp_handshake["syn_ack_seq"] = packet[TCP].seq
-                    tcp_handshake["syn_ack_sending_port"] = packet[TCP].sport
-                    tcp_handshake["syn_ack_destination_port"] = packet[TCP].dport
-            elif packet[TCP].flags == 16:
-                    tcp_handshake["ack_seq"] = packet[TCP].seq
-                    tcp_handshake["ack_sending_port"] = packet[TCP].sport
-                    tcp_handshake["ack_destination_port"] = packet[TCP].dport
+            if TCP in packet:
+                if packet[TCP].flags == 2:
+                    tcp_handshake["syn_seq"] = packet[TCP].seq
+                    tcp_handshake["syn_sending_port"] = packet[TCP].sport
+                    tcp_handshake["syn_destination_port"] = packet[TCP].dport
+                elif packet[TCP].flags == 18:
+                        tcp_handshake["syn_ack_seq"] = packet[TCP].seq
+                        tcp_handshake["syn_ack_sending_port"] = packet[TCP].sport
+                        tcp_handshake["syn_ack_destination_port"] = packet[TCP].dport
+                elif packet[TCP].flags == 16:
+                        tcp_handshake["ack_seq"] = packet[TCP].seq
+                        tcp_handshake["ack_sending_port"] = packet[TCP].sport
+                        tcp_handshake["ack_destination_port"] = packet[TCP].dport
         """
         This function returns connection details from the tcp handshake(sequence numbers, port numbers, etc.)
         Specifics: 
