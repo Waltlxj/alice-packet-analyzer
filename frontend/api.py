@@ -8,18 +8,16 @@ import flask
 import json
 import dummy_backend
 
-'''
-Uncomment to run real backend!
+
 
 sys.path.append('../backend')
 import alice_backend
-'''
 
 api = flask.Blueprint('api', __name__)
 
 #TO-DO: change to real backend
-#backend = alice_backend.AliceBackend()
-backend = dummy_backend.AliceBackend()
+backend = alice_backend.AliceBackend()
+#backend = dummy_backend.AliceBackend()
 
 '''
 To access api in particular in browser url type:

@@ -18,7 +18,7 @@ class AliceBackend:
 
     def __init__(self) -> None:
         self.enc_file = "encrypted.pcap"
-        self.dec_file = "decryptedGoogle.pcap"
+        self.dec_file = "decrypted.pcap"
         self.dec_plaintext = "decrypted.txt"
         self.key_file = "sslkeys.txt"
         self.url = "https://en.wikipedia.org"
@@ -32,6 +32,7 @@ class AliceBackend:
         # customize url
         if url:
             self.url = url
+        print("cURL browsing", self.url)
         # get IP of URL to visit
         parsed_url = urlparse(self.url)
         ip = socket.gethostbyname(parsed_url.netloc)
