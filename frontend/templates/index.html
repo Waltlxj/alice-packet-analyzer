@@ -22,10 +22,19 @@
         <b><em>Note:</em></b> full urls work better such as <u>"https://www.google.com"</u> instead of <u>"google.com"</u>.
     </p>
 
-    <form method="get" action="/details">
-        <input class="search" type="text" id="url" name="url"> 
-        <input class="submit" type="submit"> 
-    </form>
+    <div>
+        <form method="get" action="/details">
+            <input class="search" type="text" id="url" name="url"> 
+            <input class="submit" type="submit"> 
+        </form>
+
+        <!--
+        <script>
+            console.log(document.getElementById('url').value)
+            localStorage.setItem("passedUrl", document.getElementById('url').value)
+        </script>
+        -->
+    </div>
 
 </body>
 </html>

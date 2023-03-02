@@ -13,10 +13,14 @@
 
         <h4 id="urldisplay"><u> url </u></h4>
         <script>
-            console.log(window.location.search);
-            url = window.location.search.split('=');
+            //console.log(decodeURIComponent(window.location.search));
+            
+            raw_url = decodeURIComponent(window.location.search);
+            url = raw_url.split('=');
+            
             localStorage.setItem("passedUrl", url[1]);
-            document.getElementById("urldisplay").innerHTML = '<u>' + url[1] +'</u>';
+            passedUrl = decodeURI(localStorage.getItem("passedUrl"));
+            document.getElementById("urldisplay").innerHTML = '<u>' + passedUrl +'</u>';
         </script>
     </div>
     <br>

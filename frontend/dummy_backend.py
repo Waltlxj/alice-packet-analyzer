@@ -51,8 +51,6 @@ class AliceBackend:
     def get_ip_details(self):
         return {'ClientIP': '192.168.10.128', 'ServerIP': '208.80.153.224', 'IP_version': 4}
 
-
-
 if __name__ == "__main__":
     # Testing
     backend = AliceBackend()

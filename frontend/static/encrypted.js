@@ -71,7 +71,7 @@ function getEnpkt() {
 
 
         var infoBoxElement = document.getElementById('infobox');
-        infoBoxElement.innerHTML = "I love encrypted packets.";
+        infoBoxElement.innerHTML = '<b class="enpkt"> Encrypted Packets </b> These packets are encrypted (what you would see without the encryption key).';
     })
 
     // Log the error if anything went wrong during the fetch.
@@ -113,7 +113,7 @@ function getDepkt() {
         resultsTableElement.innerHTML = tableBody;
 
         var infoBoxElement = document.getElementById('infobox');
-        infoBoxElement.innerHTML = "I love decrypted packets.";
+        infoBoxElement.innerHTML = '<b class="dpkt"> Decrypted Packets: </b>  These packets have been decrypted with TLS session keys output by the browser SSLKEYLOGFILE.';
 
     })
 
@@ -153,7 +153,7 @@ function getTcp() {
         resultsTableElement.innerHTML = tableBody;
 
         var infoBoxElement = document.getElementById('infobox');
-        infoBoxElement.innerHTML = "I love tcp.";
+        infoBoxElement.innerHTML = '<b class="tcp"> TCP: </b>  The Transmission Control Protocol (TCP) facilitates the connection of hosts for the exchange of data. TCP works to keep packet delivery error free, ensuring all packets are received and in the correct order. To witness the start of a TCP session, try and find the TCP handshake, “SYN, SYN-ACK, and ACK.”';
 
     })
 
@@ -204,7 +204,7 @@ function getTls() {
         resultsTableElement.innerHTML = tableBody;
 
         var infoBoxElement = document.getElementById('infobox');
-        infoBoxElement.innerHTML = "I love tls.";
+        infoBoxElement.innerHTML = '<b class="tls"> TLS: </b>  Transport Layer Security (TLS) is a protocol which exists to ensure communication privacy by preventing eavesdropping and the malicious tampering of data. The TLS handshake authenticates the server\'s X509 certificate before initiating the Die-Hellman key exchange for secure symmetric encryption. Details on the server\'s certificate are available below.';
 
     })
 
@@ -242,7 +242,7 @@ function getIp() {
         resultsTableElement.innerHTML = tableBody;
 
         var infoBoxElement = document.getElementById('infobox');
-        infoBoxElement.innerHTML = "I love ips.";
+        infoBoxElement.innerHTML = '<b class="ip"> IP: </b>  The IP or “Internet Protocol” address is an identifier which serves an addressing function for computers within a network. Like a real address, an IP address designates a location. Packets sent over a network are marked by a header disclosing their sender and intended receiver. Because of IP, packets sent over a network will reliably arrive at their intended place.';
 
     })
 
@@ -279,8 +279,7 @@ function getHttp() {
         resultsTableElement.innerHTML = tableBody;
 
         var infoBoxElement = document.getElementById('infobox');
-        infoBoxElement.innerHTML = "I love ips.";
-
+        infoBoxElement.innerHTML = '<b class="http"> HTTP: </b>  THTTP, or the “Hypertext Transfer Protocol” oversees the transfer of hypermedia, such as HTML, between web browsers and servers.';
     })
 
     // Log the error if anything went wrong during the fetch.
