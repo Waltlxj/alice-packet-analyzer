@@ -1,8 +1,8 @@
 # Alice Packet Analyzer
 
-A pedagogical tool to demonstrate the details of HTTPS/TLS protocol in action.
+A pedagogical tool to demonstrate the details of the HTTPS/TLS protocols in action.
 
-Given a URL to browse, the tool can capture the transmitted encrypted packets while browsing the website, use the session key to decrypt the packets, and display all the information along with the protocol details (e.g., TLS handshake, SSL certification verification) on a user interface.
+Given a URL to browse, the tool can capture the transmitted encrypted packets while browsing a website, use the session key to decrypt the packets, and display the information along with the protocol details (e.g., TLS handshake, SSL certification verification) on a user interface.
 
 ## How to decrypt SSL/TLS packets manually
 
